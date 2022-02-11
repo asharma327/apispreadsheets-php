@@ -153,7 +153,8 @@ $response = Spreadsheet::delete('fileId', $query, 'accessKey', 'secretKey');
 // ['message' = '2 rows were deleted', 'status_code' => 200]
 ```
 
-##API Error Handling
+
+## API Error Handling
 
 If the API request has an error, an array with `error` and `status_code` key pairs will be returned, for example: 
 ```php
