@@ -4,7 +4,7 @@ namespace ApiSpreadsheets\Requests;
 
 use ApiSpreadsheets\SpreadsheetRequest;
 
-class Create extends SpreadsheetRequest
+class Update extends SpreadsheetRequest
 {
     /**
      * @var array
@@ -12,16 +12,14 @@ class Create extends SpreadsheetRequest
     private $data;
 
     /**
-     * @param string      $file_id
-     * @param array       $data
-     * @param string|null $access_key
-     * @param string|null $secret_key
-     *
-     * @throws \Exception
+     * @var string
      */
-    public function __construct(string $file_id, array $data, $access_key = null, $secret_key = null)
+    private $query;
+
+    public function __construct(string $file_id, array $data, string $query, $access_key = null, $secret_key = null)
     {
-        $this->data = $data;
+        $this->data  = $data;
+        $this->query = $query;
 
         parent::__construct($file_id, $access_key, $secret_key);
     }
@@ -44,7 +42,7 @@ class Create extends SpreadsheetRequest
     public function handleSuccessfulResponse(): array
     {
         if (!$response = $this->getResponse()) {
-            $response = ['message' => 'Your rows were created successfully'];
+            $response = ['message' => 'Your rows were updated successfully'];
         }
 
         return array_merge($response, ['status_code' => $this->getStatusCode()]);
@@ -60,6 +58,10 @@ class Create extends SpreadsheetRequest
     {
         if (empty($this->data)) {
             throw new \Exception('Please enter data to be created');
+        }
+
+        if (empty($this->query)) {
+            throw new \Exception('Please enter a query');
         }
     }
 
@@ -82,7 +84,8 @@ class Create extends SpreadsheetRequest
     public function dataShouldBeSent()
     {
         return [
-            'data' => $this->data
+            'data'  => $this->data,
+            'query' => $this->query
         ];
     }
 }

@@ -4,24 +4,22 @@ namespace ApiSpreadsheets\Requests;
 
 use ApiSpreadsheets\SpreadsheetRequest;
 
-class Create extends SpreadsheetRequest
+class Delete extends SpreadsheetRequest
 {
+    /**
+     * @var string
+     */
+    protected $query;
+
     /**
      * @var array
      */
-    private $data;
+    protected $params = [];
 
-    /**
-     * @param string      $file_id
-     * @param array       $data
-     * @param string|null $access_key
-     * @param string|null $secret_key
-     *
-     * @throws \Exception
-     */
-    public function __construct(string $file_id, array $data, $access_key = null, $secret_key = null)
+
+    public function __construct(string $file_id, string $query, $access_key = null, $secret_key = null)
     {
-        $this->data = $data;
+        $this->query = $query;
 
         parent::__construct($file_id, $access_key, $secret_key);
     }
@@ -33,7 +31,7 @@ class Create extends SpreadsheetRequest
      */
     public function getRequestType(): string
     {
-        return 'POST';
+        return 'GET';
     }
 
     /**
@@ -44,7 +42,7 @@ class Create extends SpreadsheetRequest
     public function handleSuccessfulResponse(): array
     {
         if (!$response = $this->getResponse()) {
-            $response = ['message' => 'Your rows were created successfully'];
+            $response = [];
         }
 
         return array_merge($response, ['status_code' => $this->getStatusCode()]);
@@ -58,8 +56,8 @@ class Create extends SpreadsheetRequest
      */
     public function validate()
     {
-        if (empty($this->data)) {
-            throw new \Exception('Please enter data to be created');
+        if (empty($this->query)) {
+            throw new \Exception('Please enter a query');
         }
     }
 
@@ -71,18 +69,13 @@ class Create extends SpreadsheetRequest
      */
     public function getResourceUrlParameters(): string
     {
-        return $this->file_id;
-    }
+        $this->params['query'] = $this->query;
 
-    /**
-     * Returns the data that should be sent in the request body.
-     *
-     * @return array
-     */
-    public function dataShouldBeSent()
-    {
-        return [
-            'data' => $this->data
-        ];
+        if (!empty($this->access_key) && !empty($this->secret_key)) {
+            $this->params['accessKey'] = $this->access_key;
+            $this->params['secretKey'] = $this->secret_key;
+        }
+
+        return $this->file_id . '/?' . http_build_query($this->params);
     }
 }

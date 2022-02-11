@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace ApiSpreadsheets;
 
 abstract class SpreadsheetRequest
@@ -9,7 +7,7 @@ abstract class SpreadsheetRequest
     /**
      * @var string
      */
-    protected $base_url = 'https://api.apispreadsheets.com/data/';
+    private $base_url = 'https://api.apispreadsheets.com/data/';
 
     /**
      * @var string
@@ -61,14 +59,13 @@ abstract class SpreadsheetRequest
      * @return string
      * @throws \Exception
      */
-    abstract public function getResourceUrl(): string;
+    abstract public function getResourceUrlParameters(): string;
 
     /**
      * @param string      $file_id
      * @param string|null $access_key
      * @param string|null $secret_key
      *
-     * @return array
      * @throws \Exception
      */
     public function __construct(string $file_id, $access_key, $secret_key)
@@ -94,10 +91,10 @@ abstract class SpreadsheetRequest
 
         $ch = curl_init($this->getResourceUrl());
 
-        if ($this->getRequestType() === 'POST' && method_exists($this, 'sendPostData')) {
-            $body = ['data' => $this->sendPostData()];
+        if ($this->getRequestType() === 'POST' && method_exists($this, 'dataShouldBeSent')) {
+            $body = $this->dataShouldBeSent();
             curl_setopt($ch, CURLOPT_POST, 1);
-            curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+            curl_setopt($ch, CURLOPT_POSTFIELDS, is_array($body) ? json_encode($body) : $body);
         }
 
         $headers = ['Content-type: application/json'];
@@ -119,7 +116,7 @@ abstract class SpreadsheetRequest
         $this->response = json_decode($result, true);
 
         if (curl_errno($ch) !== 0) {
-            throw new \Exception(curl_error($ch) ?? 'Curl error');
+            throw new \Exception(!empty(curl_error($ch)) ? curl_error($ch) : 'Curl error number ' . curl_errno($ch));
         }
 
         curl_close($ch);
@@ -133,7 +130,7 @@ abstract class SpreadsheetRequest
      * @return void
      * @throws \Exception
      */
-    private function ensureFileIdIsValid()
+    protected function ensureFileIdIsValid()
     {
         if (empty($this->file_id)) {
             throw new \Exception('Please enter a File ID');
@@ -238,10 +235,26 @@ abstract class SpreadsheetRequest
         return $this->status_code < 400;
     }
 
+    /**
+     * Validate the inputs if applicable.
+     *
+     * @return void
+     */
     private function ensureInputsIsValidated()
     {
         if (method_exists($this, 'validate')) {
             $this->validate();
         }
+    }
+
+    /**
+     * Returns the resource url.
+     *
+     * @return string
+     * @throws \Exception
+     */
+    private function getResourceUrl(): string
+    {
+        return $this->base_url . $this->getResourceUrlParameters();
     }
 }
