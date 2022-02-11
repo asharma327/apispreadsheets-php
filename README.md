@@ -100,7 +100,7 @@ require 'vendor/autoload.php';
 
 use ApiSpreadsheets\Spreadsheet;
 
-// An optional parameters to filter the required rows to read
+// An optional array to filter or change how the returned rows look like
 $params = [ 
     'dataFormat' => 'column', // Can be matrix or column, the default is row.
     'limit' => 10, // limit the returned rows
@@ -116,13 +116,16 @@ $response = Spreadsheet::read('fileId', $params, 'accessKey', 'secretKey');
 // Response:
 
 // in case of dataFormat is row (default):
-// ['data' => [['Id' => 1, 'Name' => 'Apple'], ...], 'status_code' => 200]
+// ['data' => [['Id' => 1, 'Name' => 'Apple'], [...]], 'status_code' => 200]
 
 // column dataFormat:
-// ['data' => ['Id' => [1, ...]], 'Name' => ['Apple', ...]]]
+// ['data' => ['Id' => [1, ...], 'Name' => ['Apple', ...]], 'status_code' => 200]
 
 // matrix dataFormat:
-// ['data' => [1, 'Apple'], ...]
+// ['data' => [[1, 'Apple'], [...]], 'status_code' => 200]
+
+// In case of count is true
+// ['count' => 10, 'status_code' => 200]
 ```
 
 ### 4. Delete
@@ -150,7 +153,7 @@ $response = Spreadsheet::delete('fileId', $query, 'accessKey', 'secretKey');
 // ['message' = '2 rows were deleted', 'status_code' => 200]
 ```
 
-###API Error Handling
+##API Error Handling
 
 If the API request has an error, an array with `error` and `status_code` key pairs will be returned, for example: 
 ```php
