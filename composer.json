@@ -1,0 +1,29 @@
+{
+  "name": "asharma327/apispreadsheets-php",
+  "description": "Api Spreadsheets PHP Library",
+  "keywords": [
+    "api spreadsheets",
+    "spreadsheets",
+    "apispreadsheets.com"
+  ],
+  "type": "library",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Api Spreadsheets",
+      "homepage": "https://www.apispreadsheets.com"
+    }
+  ],
+  "require": {
+    "php": ">=7.0",
+    "ext-json": "*",
+    "ext-curl": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "ApiSpreadsheets\\": "src"
+    }
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
