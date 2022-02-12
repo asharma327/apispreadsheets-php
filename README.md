@@ -53,7 +53,7 @@ $response = Spreadsheet::create('fileId', $data);
 // Or if the file is private you can provide API keys as extra parameters:
 $response = Spreadsheet::create('fileId', $data, 'accessKey', 'secretKey');
 
-// ['message' = 'Your rows were created successfully', 'status_code' => 201]
+// ['message' => 'Your rows were created successfully', 'status_code' => 201]
 ```
 
 
@@ -84,7 +84,7 @@ $response = Spreadsheet::update('fileId', $data, $query);
 // Or if the file is private you can provide API keys as extra parameters:
 $response = Spreadsheet::update('fileId', $data, $query, 'accessKey', 'secretKey');
 
-// ['message' = 'Your rows were updated successfully', 'status_code' => 201]
+// ['message' => 'Your rows were updated successfully', 'status_code' => 201]
 ```
 
 ### 3. Read
@@ -150,7 +150,7 @@ $response = Spreadsheet::delete('fileId', $query);
 $response = Spreadsheet::delete('fileId', $query, 'accessKey', 'secretKey');
 
 
-// ['message' = '2 rows were deleted', 'status_code' => 200]
+// ['message' => '2 rows were deleted', 'status_code' => 200]
 ```
 
 
