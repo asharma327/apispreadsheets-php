@@ -119,7 +119,7 @@ $response = Spreadsheet::read('fileId', $params, 'accessKey', 'secretKey');
 // ['data' => [['Id' => 1, 'Name' => 'Apple'], [...]], 'status_code' => 200]
 
 // column dataFormat:
-// ['data' => ['Id' => [1, ...], 'Name' => ['Apple', ...]], 'status_code' => 200]
+// ['Id' => [1, ...], 'Name' => ['Apple', ...], 'status_code' => 200]
 
 // matrix dataFormat:
 // ['data' => [[1, 'Apple'], [...]], 'status_code' => 200]

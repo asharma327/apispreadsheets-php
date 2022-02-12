@@ -40,10 +40,6 @@ class Read extends SpreadsheetRequest
             $response = [];
         }
 
-        if (!array_key_exists('data', $response) && !array_key_exists('count', $response)) {
-            $response['data'] = $response;
-        }
-
         return array_merge($response, ['status_code' => $this->getStatusCode()]);
     }
 
