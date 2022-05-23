@@ -18,7 +18,7 @@ class Spreadsheet
 {
     public static function __callStatic($name, $arguments)
     {
-        $class = "ApiSpreadsheets\\Requests\\" . strtolower($name);
+        $class = "ApiSpreadsheets\\Requests\\" . ucfirst(strtolower($name));
 
         if (class_exists($class)) {
             return (new $class(...$arguments))->execute();
